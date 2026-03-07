@@ -16,20 +16,23 @@
     </header>
 
     <div id="controls">
-      <div class="filter-group">
-        <label>카테고리</label>
-        <div id="category-filters"></div>
-      </div>
-      <div class="filter-group">
-        <label>소스</label>
-        <button class="source-btn active" data-source="all">전체</button>
-        <button class="source-btn" data-source="x.com">𝕏</button>
-        <button class="source-btn" data-source="threads">Threads</button>
-      </div>
-      <div class="legend">
-        <span class="legend-item"><span class="dot bright"></span> 최신 뉴스</span>
-        <span class="legend-item"><span class="dot medium"></span> 최근 뉴스</span>
-        <span class="legend-item"><span class="dot dim"></span> 지난 뉴스</span>
+      <button id="filter-toggle" aria-label="필터 열기">⚙</button>
+      <div id="filter-panel">
+        <div class="filter-group">
+          <label>카테고리</label>
+          <div id="category-filters"></div>
+        </div>
+        <div class="filter-group">
+          <label>소스</label>
+          <button class="source-btn active" data-source="all">전체</button>
+          <button class="source-btn" data-source="x.com">𝕏</button>
+          <button class="source-btn" data-source="threads">Threads</button>
+        </div>
+        <div class="legend">
+          <span class="legend-item"><span class="dot bright"></span> 최신 뉴스</span>
+          <span class="legend-item"><span class="dot medium"></span> 최근 뉴스</span>
+          <span class="legend-item"><span class="dot dim"></span> 지난 뉴스</span>
+        </div>
       </div>
     </div>
 

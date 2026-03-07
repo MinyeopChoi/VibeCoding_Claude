@@ -124,18 +124,25 @@
     simulation.alpha(0.3).restart();
   });
 
+  // Adjust forces for screen size
+  const isSmallScreen = width < 768;
+  const linkDistShort = isSmallScreen ? 50 : 80;
+  const linkDistLong = isSmallScreen ? 90 : 140;
+  const chargeCategory = isSmallScreen ? -200 : -400;
+  const chargeNews = isSmallScreen ? -60 : -120;
+
   // Force simulation
   const simulation = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links).id(d => d.id).distance(d => {
-      if (d.strength > 0.4) return 80;
-      return 140;
+      if (d.strength > 0.4) return linkDistShort;
+      return linkDistLong;
     }).strength(d => d.strength))
     .force('charge', d3.forceManyBody()
-      .strength(d => d.type === 'category' ? -400 : -120))
+      .strength(d => d.type === 'category' ? chargeCategory : chargeNews))
     .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collision', d3.forceCollide().radius(d => d.radius + 8))
-    .force('x', d3.forceX(width / 2).strength(0.03))
-    .force('y', d3.forceY(height / 2).strength(0.03))
+    .force('collision', d3.forceCollide().radius(d => d.radius + (isSmallScreen ? 4 : 8)))
+    .force('x', d3.forceX(width / 2).strength(isSmallScreen ? 0.06 : 0.03))
+    .force('y', d3.forceY(height / 2).strength(isSmallScreen ? 0.06 : 0.03))
     .alphaDecay(0.015)
     .velocityDecay(0.4)
     .on('tick', draw);
@@ -312,6 +319,17 @@
     });
   });
 
+  // Mobile detection
+  const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+  // Filter toggle for mobile
+  const filterToggle = document.getElementById('filter-toggle');
+  const filterPanel = document.getElementById('filter-panel');
+  filterToggle.addEventListener('click', () => {
+    filterPanel.classList.toggle('open');
+    filterToggle.classList.toggle('active');
+  });
+
   // Interaction: hover & click
   const tooltip = document.getElementById('tooltip');
   const detailPanel = document.getElementById('detail-panel');
@@ -322,18 +340,23 @@
     const x = (px - transform.x) / transform.k;
     const y = (py - transform.y) / transform.k;
 
+    // Larger hit area on mobile
+    const hitPadding = isMobile ? 12 : 5;
+
     for (let i = nodes.length - 1; i >= 0; i--) {
       const node = nodes[i];
       if (!node.visible || !node.x || !node.y) continue;
       const dx = x - node.x;
       const dy = y - node.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < node.radius + 5) return node;
+      if (dist < node.radius + hitPadding) return node;
     }
     return null;
   }
 
+  // Desktop: mousemove for tooltip
   canvas.addEventListener('mousemove', (e) => {
+    if (isMobile) return;
     const node = getNodeAtPoint(e.clientX, e.clientY);
 
     if (node && node.type === 'news' && node.visible) {
@@ -369,13 +392,70 @@
     }
   });
 
+  // Desktop: click
   canvas.addEventListener('click', (e) => {
-    const node = getNodeAtPoint(e.clientX, e.clientY);
+    if (isMobile) return;
+    handleNodeInteraction(e.clientX, e.clientY);
+  });
+
+  // Mobile: touch handling
+  let touchStartTime = 0;
+  let touchStartPos = { x: 0, y: 0 };
+  let touchDragNode = null;
+  let isTouchDragging = false;
+
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    touchStartTime = Date.now();
+    touchStartPos = { x: touch.clientX, y: touch.clientY };
+    isTouchDragging = false;
+
+    const node = getNodeAtPoint(touch.clientX, touch.clientY);
+    if (node) {
+      touchDragNode = node;
+    }
+  }, { passive: true });
+
+  canvas.addEventListener('touchmove', (e) => {
+    if (e.touches.length !== 1 || !touchDragNode) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchStartPos.x;
+    const dy = touch.clientY - touchStartPos.y;
+
+    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+      isTouchDragging = true;
+      const x = (touch.clientX - transform.x) / transform.k;
+      const y = (touch.clientY - transform.y) / transform.k;
+      touchDragNode.fx = x;
+      touchDragNode.fy = y;
+      simulation.alpha(0.3).restart();
+    }
+  }, { passive: true });
+
+  canvas.addEventListener('touchend', (e) => {
+    const elapsed = Date.now() - touchStartTime;
+
+    if (touchDragNode) {
+      touchDragNode.fx = null;
+      touchDragNode.fy = null;
+    }
+
+    // Tap detection: short duration, no drag
+    if (elapsed < 300 && !isTouchDragging) {
+      handleNodeInteraction(touchStartPos.x, touchStartPos.y);
+    }
+
+    touchDragNode = null;
+    isTouchDragging = false;
+  }, { passive: true });
+
+  function handleNodeInteraction(px, py) {
+    const node = getNodeAtPoint(px, py);
 
     if (node && node.type === 'news' && node.visible) {
       showDetail(node.data);
     } else if (node && node.type === 'category') {
-      // Click category to filter
       activeCategory = node.id;
       filterContainer.querySelectorAll('.cat-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.cat === node.id);
@@ -384,7 +464,7 @@
     } else {
       hideDetail();
     }
-  });
+  }
 
   function showDetail(d) {
     detailPanel.querySelector('.detail-source').textContent =
@@ -403,13 +483,17 @@
     detailPanel.classList.add('hidden');
   }
 
-  document.getElementById('detail-close').addEventListener('click', hideDetail);
+  document.getElementById('detail-close').addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideDetail();
+  });
 
-  // Drag behavior
+  // Desktop drag behavior
   let dragNode = null;
   let isDragging = false;
 
   canvas.addEventListener('mousedown', (e) => {
+    if (isMobile) return;
     const node = getNodeAtPoint(e.clientX, e.clientY);
     if (node) {
       dragNode = node;
@@ -418,7 +502,8 @@
   });
 
   canvas.addEventListener('mousemove', (e) => {
-    if (dragNode && (e.movementX !== 0 || e.movementY !== 0)) {
+    if (isMobile || !dragNode) return;
+    if (e.movementX !== 0 || e.movementY !== 0) {
       isDragging = true;
       const x = (e.clientX - transform.x) / transform.k;
       const y = (e.clientY - transform.y) / transform.k;
