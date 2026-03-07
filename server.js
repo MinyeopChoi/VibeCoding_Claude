@@ -29,6 +29,11 @@ app.get('/mobile', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'mobile.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`AI News Feed running at http://localhost:${PORT}`);
-});
+// Vercel serverless export
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  app.listen(PORT, () => {
+    console.log(`AI News Feed running at http://localhost:${PORT}`);
+  });
+}
