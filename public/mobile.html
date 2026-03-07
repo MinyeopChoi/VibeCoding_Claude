@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AI 뉴스 피드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 상단 헤더 -->
+    <header>
+      <h1>AI 뉴스</h1>
+      <p class="subtitle">실시간 AI 트렌드</p>
+    </header>
+
+    <!-- 카테고리 필터 (가로 스크롤) -->
+    <nav id="category-bar">
+      <button class="cat-chip active" data-cat="all">전체</button>
+    </nav>
+
+    <!-- 소스 필터 -->
+    <nav id="source-bar">
+      <button class="src-chip active" data-source="all">전체</button>
+      <button class="src-chip" data-source="x.com">𝕏</button>
+      <button class="src-chip" data-source="threads">Threads</button>
+    </nav>
+
+    <!-- 뉴스 카드 리스트 -->
+    <main id="feed"></main>
+
+    <!-- 디테일 오버레이 -->
+    <div id="detail-overlay" class="hidden">
+      <div id="detail-sheet">
+        <div class="sheet-handle"></div>
+        <button id="detail-close">✕</button>
+        <span class="detail-source"></span>
+        <h2 class="detail-title"></h2>
+        <p class="detail-summary"></p>
+        <div class="detail-tags"></div>
+        <div class="detail-meta"></div>
+        <a class="detail-link" href="#" target="_blank" rel="noopener">원본 보기 →</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="mobile.js"></script>
+</body>
+</html>
