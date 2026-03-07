@@ -1,0 +1,12 @@
+{
+  "name": "ai-news-feed",
+  "version": "1.0.0",
+  "description": "AI News Feed - Network Graph Visualization",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

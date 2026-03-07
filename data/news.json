@@ -1,0 +1,291 @@
+{
+  "categories": [
+    {
+      "id": "llm",
+      "label": "대규모 언어 모델",
+      "icon": "brain"
+    },
+    {
+      "id": "image-gen",
+      "label": "이미지 생성",
+      "icon": "image"
+    },
+    {
+      "id": "video-gen",
+      "label": "영상 생성",
+      "icon": "video"
+    },
+    {
+      "id": "code-ai",
+      "label": "코드 AI",
+      "icon": "code"
+    },
+    {
+      "id": "music-ai",
+      "label": "음악 AI",
+      "icon": "music"
+    },
+    {
+      "id": "robotics",
+      "label": "로보틱스",
+      "icon": "robot"
+    },
+    {
+      "id": "ai-policy",
+      "label": "AI 정책/규제",
+      "icon": "shield"
+    },
+    {
+      "id": "ai-tools",
+      "label": "AI 도구/서비스",
+      "icon": "tool"
+    },
+    {
+      "id": "research",
+      "label": "AI 연구",
+      "icon": "flask"
+    }
+  ],
+  "news": [
+    {
+      "id": "n1",
+      "title": "Claude 4.5 Opus 출시 — 역대 최강 성능",
+      "summary": "Anthropic이 Claude 4.5 Opus를 공개했습니다. 코딩, 수학, 추론 벤치마크에서 기존 모델 대비 크게 향상된 성능을 보여줍니다.",
+      "category": "llm",
+      "source": "x.com",
+      "sourceHandle": "@AnthropicAI",
+      "date": "2026-03-07",
+      "tags": ["Claude", "Anthropic", "LLM"],
+      "url": "https://x.com/AnthropicAI",
+      "relatedIds": ["n2", "n8"]
+    },
+    {
+      "id": "n2",
+      "title": "GPT-5 터보 모델 성능 비교 분석",
+      "summary": "OpenAI의 GPT-5 터보 모델이 다양한 벤치마크에서 테스트되었습니다. 멀티모달 능력이 크게 향상되었다는 평가입니다.",
+      "category": "llm",
+      "source": "x.com",
+      "sourceHandle": "@OpenAI",
+      "date": "2026-03-06",
+      "tags": ["GPT-5", "OpenAI", "LLM"],
+      "url": "https://x.com/OpenAI",
+      "relatedIds": ["n1", "n3"]
+    },
+    {
+      "id": "n3",
+      "title": "Gemini 2.5 Pro — 구글의 반격",
+      "summary": "Google DeepMind가 Gemini 2.5 Pro를 발표했습니다. 100만 토큰 컨텍스트 윈도우와 향상된 추론 능력이 특징입니다.",
+      "category": "llm",
+      "source": "threads",
+      "sourceHandle": "@GoogleAI",
+      "date": "2026-03-05",
+      "tags": ["Gemini", "Google", "LLM"],
+      "url": "https://threads.net/@googleai",
+      "relatedIds": ["n1", "n2"]
+    },
+    {
+      "id": "n4",
+      "title": "Midjourney V7 — 실사 수준 이미지 생성",
+      "summary": "Midjourney V7이 출시되었습니다. 포토리얼리즘 수준이 대폭 개선되어 실제 사진과 구분이 어려운 수준의 이미지를 생성합니다.",
+      "category": "image-gen",
+      "source": "x.com",
+      "sourceHandle": "@midaborney",
+      "date": "2026-03-07",
+      "tags": ["Midjourney", "이미지생성", "AI아트"],
+      "url": "https://x.com/midjourney",
+      "relatedIds": ["n5", "n12"]
+    },
+    {
+      "id": "n5",
+      "title": "Stable Diffusion 4.0 오픈소스 공개",
+      "summary": "Stability AI가 Stable Diffusion 4.0을 오픈소스로 공개했습니다. 로컬에서 실행 가능하며 상업적 사용도 허용됩니다.",
+      "category": "image-gen",
+      "source": "x.com",
+      "sourceHandle": "@StabilityAI",
+      "date": "2026-03-04",
+      "tags": ["StableDiffusion", "오픈소스", "이미지생성"],
+      "url": "https://x.com/StabilityAI",
+      "relatedIds": ["n4", "n15"]
+    },
+    {
+      "id": "n6",
+      "title": "Sora 2.0 — 5분 고품질 영상 생성 가능",
+      "summary": "OpenAI의 Sora가 2.0으로 업데이트되어 최대 5분 길이의 고품질 영상을 생성할 수 있게 되었습니다.",
+      "category": "video-gen",
+      "source": "x.com",
+      "sourceHandle": "@OpenAI",
+      "date": "2026-03-06",
+      "tags": ["Sora", "영상생성", "OpenAI"],
+      "url": "https://x.com/OpenAI",
+      "relatedIds": ["n2", "n7"]
+    },
+    {
+      "id": "n7",
+      "title": "Runway Gen-4 출시 — 영화급 AI 영상",
+      "summary": "Runway가 Gen-4를 출시했습니다. 영화 수준의 조명, 카메라 워크, 캐릭터 일관성을 지원합니다.",
+      "category": "video-gen",
+      "source": "threads",
+      "sourceHandle": "@runwayml",
+      "date": "2026-03-03",
+      "tags": ["Runway", "영상생성", "AI영화"],
+      "url": "https://threads.net/@runwayml",
+      "relatedIds": ["n6"]
+    },
+    {
+      "id": "n8",
+      "title": "Claude Code — AI 코딩 에이전트 업데이트",
+      "summary": "Anthropic이 Claude Code의 대규모 업데이트를 발표했습니다. 멀티파일 편집, 자동 테스트, Git 통합 등이 강화되었습니다.",
+      "category": "code-ai",
+      "source": "x.com",
+      "sourceHandle": "@AnthropicAI",
+      "date": "2026-03-07",
+      "tags": ["ClaudeCode", "코딩AI", "Anthropic"],
+      "url": "https://x.com/AnthropicAI",
+      "relatedIds": ["n1", "n9"]
+    },
+    {
+      "id": "n9",
+      "title": "GitHub Copilot X2 — 에이전트 기반 코딩",
+      "summary": "GitHub이 Copilot X2를 발표했습니다. 자율 에이전트가 PR 생성, 코드 리뷰, 버그 수정까지 수행합니다.",
+      "category": "code-ai",
+      "source": "x.com",
+      "sourceHandle": "@GitHubCopilot",
+      "date": "2026-03-05",
+      "tags": ["Copilot", "GitHub", "코딩AI"],
+      "url": "https://x.com/GitHubCopilot",
+      "relatedIds": ["n8", "n10"]
+    },
+    {
+      "id": "n10",
+      "title": "Cursor 2.0 — AI 네이티브 IDE 진화",
+      "summary": "Cursor가 2.0으로 업그레이드되었습니다. 멀티 에이전트 워크플로우와 실시간 협업 기능이 추가되었습니다.",
+      "category": "code-ai",
+      "source": "threads",
+      "sourceHandle": "@cursor_ai",
+      "date": "2026-03-02",
+      "tags": ["Cursor", "IDE", "코딩AI"],
+      "url": "https://threads.net/@cursor_ai",
+      "relatedIds": ["n8", "n9"]
+    },
+    {
+      "id": "n11",
+      "title": "Suno V4 — AI 음악 작곡의 새 시대",
+      "summary": "Suno V4가 출시되어 전문 음악가 수준의 작곡이 가능해졌습니다. 다양한 장르와 악기 조합을 지원합니다.",
+      "category": "music-ai",
+      "source": "x.com",
+      "sourceHandle": "@sabornoai",
+      "date": "2026-03-04",
+      "tags": ["Suno", "AI음악", "작곡AI"],
+      "url": "https://x.com/suno",
+      "relatedIds": ["n15"]
+    },
+    {
+      "id": "n12",
+      "title": "Figure 03 — 범용 휴머노이드 로봇 공개",
+      "summary": "Figure AI가 세 번째 세대 휴머노이드 로봇 Figure 03를 공개했습니다. OpenAI 모델 탑재로 자연어 명령 수행이 가능합니다.",
+      "category": "robotics",
+      "source": "x.com",
+      "sourceHandle": "@Figure_robot",
+      "date": "2026-03-06",
+      "tags": ["Figure", "휴머노이드", "로보틱스"],
+      "url": "https://x.com/Figure_robot",
+      "relatedIds": ["n13"]
+    },
+    {
+      "id": "n13",
+      "title": "Tesla Optimus Gen 3 양산 시작",
+      "summary": "Tesla가 Optimus Gen 3 휴머노이드 로봇의 양산을 시작했습니다. 공장 작업부터 가정용까지 다양한 용도로 출시됩니다.",
+      "category": "robotics",
+      "source": "threads",
+      "sourceHandle": "@tesla",
+      "date": "2026-03-01",
+      "tags": ["Tesla", "Optimus", "로보틱스"],
+      "url": "https://threads.net/@tesla",
+      "relatedIds": ["n12"]
+    },
+    {
+      "id": "n14",
+      "title": "EU AI Act 시행 — AI 규제 본격화",
+      "summary": "EU의 AI Act가 본격 시행되었습니다. 고위험 AI 시스템에 대한 규제가 강화되며 글로벌 AI 기업에 영향을 미칩니다.",
+      "category": "ai-policy",
+      "source": "x.com",
+      "sourceHandle": "@EUPolicy",
+      "date": "2026-03-03",
+      "tags": ["EU", "AI규제", "정책"],
+      "url": "https://x.com/EUPolicy",
+      "relatedIds": ["n16"]
+    },
+    {
+      "id": "n15",
+      "title": "Hugging Face — 오픈소스 AI 허브 대규모 업데이트",
+      "summary": "Hugging Face가 플랫폼 대규모 업데이트를 발표했습니다. 모델 배포, 파인튜닝, 데이터셋 관리 기능이 크게 개선되었습니다.",
+      "category": "ai-tools",
+      "source": "x.com",
+      "sourceHandle": "@huggingface",
+      "date": "2026-03-05",
+      "tags": ["HuggingFace", "오픈소스", "AI도구"],
+      "url": "https://x.com/huggingface",
+      "relatedIds": ["n5", "n11"]
+    },
+    {
+      "id": "n16",
+      "title": "AI 에이전트 시대 본격 개막",
+      "summary": "주요 AI 기업들이 잇따라 자율 AI 에이전트를 출시하면서 '에이전트 시대'가 본격적으로 시작되었다는 분석이 나옵니다.",
+      "category": "research",
+      "source": "threads",
+      "sourceHandle": "@AIResearch",
+      "date": "2026-03-07",
+      "tags": ["AI에이전트", "트렌드", "연구"],
+      "url": "https://threads.net/@airesearch",
+      "relatedIds": ["n8", "n9", "n14"]
+    },
+    {
+      "id": "n17",
+      "title": "Perplexity AI — 실시간 AI 검색 혁신",
+      "summary": "Perplexity AI가 실시간 검색 기능을 대폭 강화했습니다. 소스 인용과 팩트체크 정확도가 크게 향상되었습니다.",
+      "category": "ai-tools",
+      "source": "x.com",
+      "sourceHandle": "@peraborplexity_ai",
+      "date": "2026-03-06",
+      "tags": ["Perplexity", "AI검색", "도구"],
+      "url": "https://x.com/perplexity_ai",
+      "relatedIds": ["n15", "n2"]
+    },
+    {
+      "id": "n18",
+      "title": "메타 Llama 4 — 오픈소스 LLM 최강자",
+      "summary": "Meta가 Llama 4를 오픈소스로 공개했습니다. GPT-5급 성능을 무료로 사용할 수 있어 AI 민주화에 기여할 전망입니다.",
+      "category": "llm",
+      "source": "threads",
+      "sourceHandle": "@meta",
+      "date": "2026-03-02",
+      "tags": ["Llama4", "Meta", "오픈소스LLM"],
+      "url": "https://threads.net/@meta",
+      "relatedIds": ["n1", "n2", "n3"]
+    },
+    {
+      "id": "n19",
+      "title": "Apple Intelligence 3.0 — 시리 대폭 업그레이드",
+      "summary": "Apple이 Intelligence 3.0을 발표했습니다. Siri가 GPT급 대화 능력을 갖추고 앱 간 자동화 에이전트 기능을 수행합니다.",
+      "category": "ai-tools",
+      "source": "x.com",
+      "sourceHandle": "@Apple",
+      "date": "2026-03-01",
+      "tags": ["Apple", "Siri", "AI도구"],
+      "url": "https://x.com/Apple",
+      "relatedIds": ["n16", "n15"]
+    },
+    {
+      "id": "n20",
+      "title": "AI 반도체 전쟁 심화 — NVIDIA vs AMD vs 자체칩",
+      "summary": "AI 반도체 경쟁이 치열해지고 있습니다. NVIDIA의 B300, AMD의 MI400, 그리고 구글/MS의 자체 AI칩이 경쟁 중입니다.",
+      "category": "research",
+      "source": "x.com",
+      "sourceHandle": "@techreview",
+      "date": "2026-02-28",
+      "tags": ["반도체", "NVIDIA", "AI하드웨어"],
+      "url": "https://x.com/techreview",
+      "relatedIds": ["n3", "n18"]
+    }
+  ]
+}

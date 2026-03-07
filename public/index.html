@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 뉴스 피드 — 네트워크 그래프</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>AI 뉴스 네트워크</h1>
+      <p class="subtitle">최신 AI 뉴스 · 생성형 AI · 트렌드</p>
+    </header>
+
+    <div id="controls">
+      <div class="filter-group">
+        <label>카테고리</label>
+        <div id="category-filters"></div>
+      </div>
+      <div class="filter-group">
+        <label>소스</label>
+        <button class="source-btn active" data-source="all">전체</button>
+        <button class="source-btn" data-source="x.com">𝕏</button>
+        <button class="source-btn" data-source="threads">Threads</button>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="dot bright"></span> 최신 뉴스</span>
+        <span class="legend-item"><span class="dot medium"></span> 최근 뉴스</span>
+        <span class="legend-item"><span class="dot dim"></span> 지난 뉴스</span>
+      </div>
+    </div>
+
+    <div id="graph-container">
+      <canvas id="graph-canvas"></canvas>
+    </div>
+
+    <div id="tooltip" class="hidden">
+      <div class="tooltip-header">
+        <span class="tooltip-source"></span>
+        <span class="tooltip-date"></span>
+      </div>
+      <h3 class="tooltip-title"></h3>
+      <p class="tooltip-summary"></p>
+      <div class="tooltip-tags"></div>
+      <div class="tooltip-footer">클릭하여 원본 보기</div>
+    </div>
+
+    <div id="detail-panel" class="hidden">
+      <button id="detail-close">✕</button>
+      <div class="detail-source"></div>
+      <h2 class="detail-title"></h2>
+      <p class="detail-summary"></p>
+      <div class="detail-tags"></div>
+      <div class="detail-meta"></div>
+      <a class="detail-link" href="#" target="_blank" rel="noopener">원본 보기 →</a>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
