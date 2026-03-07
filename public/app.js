@@ -370,7 +370,7 @@
 
       const d = node.data;
       tooltip.querySelector('.tooltip-source').textContent =
-        d.source === 'x.com' ? `𝕏 ${d.sourceHandle}` : `Threads ${d.sourceHandle}`;
+        d.source === 'x.com' ? `𝕏 ${d.sourceHandle}` : d.source === 'threads' ? `Threads ${d.sourceHandle}` : `📰 ${d.sourceHandle}`;
       tooltip.querySelector('.tooltip-date').textContent = d.date;
       tooltip.querySelector('.tooltip-title').textContent = d.title;
       tooltip.querySelector('.tooltip-summary').textContent = d.summary;
@@ -473,7 +473,7 @@
 
   function showDetail(d) {
     detailPanel.querySelector('.detail-source').textContent =
-      d.source === 'x.com' ? `𝕏 ${d.sourceHandle}` : `Threads ${d.sourceHandle}`;
+      d.source === 'x.com' ? `𝕏 ${d.sourceHandle}` : d.source === 'threads' ? `Threads ${d.sourceHandle}` : `📰 ${d.sourceHandle}`;
     detailPanel.querySelector('.detail-title').textContent = d.title;
     detailPanel.querySelector('.detail-summary').textContent = d.summary;
     detailPanel.querySelector('.detail-tags').innerHTML =

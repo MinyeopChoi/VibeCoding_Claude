@@ -103,7 +103,9 @@
     feed.innerHTML = filtered.map(n => {
       const color = categoryColors[n.category] || '#79c0ff';
       const freshClass = getFreshnessClass(n.date);
-      const sourceLabel = n.source === 'x.com' ? `𝕏 ${n.sourceHandle}` : `Threads ${n.sourceHandle}`;
+      const sourceLabel = n.source === 'x.com' ? `𝕏 ${n.sourceHandle}`
+        : n.source === 'threads' ? `Threads ${n.sourceHandle}`
+        : `📰 ${n.sourceHandle}`;
 
       return `
         <article class="news-card" data-id="${n.id}">
@@ -138,7 +140,9 @@
 
   function showDetail(n) {
     overlay.querySelector('.detail-source').textContent =
-      n.source === 'x.com' ? `𝕏 ${n.sourceHandle}` : `Threads ${n.sourceHandle}`;
+      n.source === 'x.com' ? `𝕏 ${n.sourceHandle}`
+      : n.source === 'threads' ? `Threads ${n.sourceHandle}`
+      : `📰 ${n.sourceHandle}`;
     overlay.querySelector('.detail-title').textContent = n.title;
     overlay.querySelector('.detail-summary').textContent = n.summary;
     overlay.querySelector('.detail-tags').innerHTML =

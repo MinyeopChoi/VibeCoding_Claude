@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const { fetchAllNews } = require('./lib/newsFetcher');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,17 +18,23 @@ app.get('/', (req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
-// Sample AI news data (sourced from X.com and Threads trends)
-const newsData = require('./data/news.json');
+// 샘플 데이터 (실시간 피드 실패 시 폴백)
+const fallbackData = require('./data/news.json');
 
-app.get('/api/news', (req, res) => {
-  const now = new Date();
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const filtered = {
-    ...newsData,
-    news: newsData.news.filter(n => new Date(n.date) >= thirtyDaysAgo)
-  };
-  res.json(filtered);
+// 실시간 AI 뉴스 API
+app.get('/api/news', async (req, res) => {
+  try {
+    const liveNews = await fetchAllNews();
+    if (liveNews && liveNews.news.length > 0) {
+      res.json(liveNews);
+    } else {
+      // 실시간 뉴스가 없으면 샘플 데이터 폴백
+      res.json(fallbackData);
+    }
+  } catch (err) {
+    console.error('[API] News fetch error:', err.message);
+    res.json(fallbackData);
+  }
 });
 
 // Auto-redirect mobile users to mobile page
