@@ -21,7 +21,13 @@ app.use(express.json());
 const newsData = require('./data/news.json');
 
 app.get('/api/news', (req, res) => {
-  res.json(newsData);
+  const now = new Date();
+  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const filtered = {
+    ...newsData,
+    news: newsData.news.filter(n => new Date(n.date) >= thirtyDaysAgo)
+  };
+  res.json(filtered);
 });
 
 // Auto-redirect mobile users to mobile page

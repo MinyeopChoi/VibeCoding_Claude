@@ -1,8 +1,13 @@
 // AI News Feed — Mobile Card View
 (async function () {
   const res = await fetch('/api/news');
-  const data = await res.json();
-  const today = new Date('2026-03-07');
+  const rawData = await res.json();
+  const today = new Date();
+  const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const data = {
+    ...rawData,
+    news: rawData.news.filter(n => new Date(n.date) >= thirtyDaysAgo)
+  };
 
   const categoryColors = {
     'llm': '#79c0ff',
