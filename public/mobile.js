@@ -1,4 +1,4 @@
-// AI News Feed — Mobile Card View
+// AI News Feed — Mobile Tree View
 (async function () {
   const res = await fetch('/api/news');
   const rawData = await res.json();
@@ -48,8 +48,8 @@
   }
 
   // State
-  let activeCategory = 'all';
   let activeSource = 'all';
+  const expandedCategories = new Set(data.categories.map(cat => cat.id));
 
   // Build category chips
   const categoryBar = document.getElementById('category-bar');
@@ -61,14 +61,29 @@
     categoryBar.appendChild(btn);
   });
 
-  // Category filter click
+  // Category quick focus
   categoryBar.addEventListener('click', e => {
     const btn = e.target.closest('.cat-chip');
     if (!btn) return;
     categoryBar.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    activeCategory = btn.dataset.cat;
+    const categoryId = btn.dataset.cat;
+    if (categoryId === 'all') {
+      data.categories.forEach(cat => expandedCategories.add(cat.id));
+      renderFeed();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    expandedCategories.add(categoryId);
     renderFeed();
+
+    requestAnimationFrame(() => {
+      const section = document.querySelector(`.tree-group[data-category="${categoryId}"]`);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   });
 
   // Source filter click
@@ -85,52 +100,86 @@
   // Render feed
   const feed = document.getElementById('feed');
 
-  function renderFeed() {
-    const filtered = data.news.filter(n => {
-      const catMatch = activeCategory === 'all' || n.category === activeCategory;
-      const srcMatch = activeSource === 'all' || n.source === activeSource;
-      return catMatch && srcMatch;
-    });
+  function getSourceLabel(item) {
+    return item.source === 'x.com' ? `𝕏 ${item.sourceHandle}`
+      : item.source === 'threads' ? `Threads ${item.sourceHandle}`
+      : `📰 ${item.sourceHandle}`;
+  }
 
-    // Sort by date (newest first)
-    filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+  function renderFeed() {
+    const filtered = data.news
+      .filter(n => activeSource === 'all' || n.source === activeSource)
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     if (filtered.length === 0) {
       feed.innerHTML = '<div class="empty-state">해당 조건의 뉴스가 없습니다</div>';
       return;
     }
 
-    feed.innerHTML = filtered.map(n => {
-      const color = categoryColors[n.category] || '#79c0ff';
-      const freshClass = getFreshnessClass(n.date);
-      const sourceLabel = n.source === 'x.com' ? `𝕏 ${n.sourceHandle}`
-        : n.source === 'threads' ? `Threads ${n.sourceHandle}`
-        : `📰 ${n.sourceHandle}`;
+    const grouped = data.categories.map(cat => {
+      const items = filtered.filter(item => item.category === cat.id);
+      return { ...cat, items };
+    }).filter(group => group.items.length > 0);
+
+    feed.innerHTML = grouped.map(group => {
+      const color = categoryColors[group.id] || '#79c0ff';
+      const isExpanded = expandedCategories.has(group.id);
+      const latest = group.items[0];
 
       return `
-        <article class="news-card" data-id="${n.id}">
-          <div class="card-accent" style="background:${color}"></div>
-          <div class="card-fresh ${freshClass}"></div>
-          <div class="card-top">
-            <span class="card-source">${sourceLabel}</span>
-            <span class="card-date">${formatRelativeDate(n.date)}</span>
+        <section class="tree-group ${isExpanded ? 'expanded' : 'collapsed'}" data-category="${group.id}">
+          <button class="tree-toggle" type="button" data-category="${group.id}" aria-expanded="${isExpanded}">
+            <span class="tree-rail" style="background:${color}"></span>
+            <span class="tree-toggle-main">
+              <span class="tree-label">${group.label}</span>
+              <span class="tree-meta">${group.items.length}개 · 최신 ${formatRelativeDate(latest.date)}</span>
+            </span>
+            <span class="tree-chevron">${isExpanded ? '−' : '+'}</span>
+          </button>
+          <div class="tree-children">
+            ${group.items.map(item => {
+              const freshClass = getFreshnessClass(item.date);
+              return `
+                <button class="news-item" type="button" data-id="${item.id}">
+                  <span class="news-item-line" style="background:${color}"></span>
+                  <span class="news-item-main">
+                    <span class="news-item-top">
+                      <span class="news-item-source">${getSourceLabel(item)}</span>
+                      <span class="news-item-date">${formatRelativeDate(item.date)}</span>
+                    </span>
+                    <strong class="news-item-title">${item.title}</strong>
+                    <span class="news-item-summary">${item.summary}</span>
+                    <span class="news-item-tags">
+                      ${item.tags.slice(0, 3).map(t => `<span class="tag">#${t}</span>`).join('')}
+                    </span>
+                  </span>
+                  <span class="news-item-fresh ${freshClass}"></span>
+                </button>
+              `;
+            }).join('')}
           </div>
-          <h3 class="card-title">${n.title}</h3>
-          <p class="card-summary">${n.summary}</p>
-          <div class="card-tags">
-            ${n.tags.map(t => `<span class="tag">#${t}</span>`).join('')}
-            <span class="card-category">${categoryMap[n.category] || n.category}</span>
-          </div>
-        </article>
+        </section>
       `;
     }).join('');
   }
 
-  // Card tap → detail
+  // Tree interaction
   feed.addEventListener('click', e => {
-    const card = e.target.closest('.news-card');
-    if (!card) return;
-    const newsItem = data.news.find(n => n.id === card.dataset.id);
+    const toggle = e.target.closest('.tree-toggle');
+    if (toggle) {
+      const categoryId = toggle.dataset.category;
+      if (expandedCategories.has(categoryId)) {
+        expandedCategories.delete(categoryId);
+      } else {
+        expandedCategories.add(categoryId);
+      }
+      renderFeed();
+      return;
+    }
+
+    const item = e.target.closest('.news-item');
+    if (!item) return;
+    const newsItem = data.news.find(n => n.id === item.dataset.id);
     if (newsItem) showDetail(newsItem);
   });
 
