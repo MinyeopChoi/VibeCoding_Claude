@@ -1,0 +1,317 @@
+{
+  "last_node_id": 15,
+  "last_link_id": 18,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [50, 50],
+      "size": [315, 82],
+      "properties": {},
+      "widgets_values": [
+        "flux-2-klein-base-9b-fp8.safetensors",
+        "fp8_e4m3fn"
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [1],
+          "slot_index": 0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [50, 200],
+      "size": [315, 82],
+      "properties": {},
+      "widgets_values": [
+        "qwen_3_8b_fp8mixed.safetensors",
+        "flux"
+      ],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [2, 3],
+          "slot_index": 0
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [50, 350],
+      "size": [315, 58],
+      "properties": {},
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [4],
+          "slot_index": 0
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "CLIPTextEncode",
+      "pos": [450, 50],
+      "size": [420, 164],
+      "properties": {},
+      "widgets_values": [
+        "equirectangular 360 degree panorama, HDRI environment map, seamless spherical projection, outdoor landscape with dramatic sky, golden hour lighting, volumetric clouds, high dynamic range, photorealistic, 8k quality"
+      ],
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [5],
+          "slot_index": 0
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "CLIPTextEncode",
+      "pos": [450, 280],
+      "size": [420, 164],
+      "properties": {},
+      "widgets_values": [
+        "flat, low quality, blurry, distorted, watermark, text, logo, cropped, worst quality, jpeg artifacts, visible seam, stitching artifacts"
+      ],
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [6],
+          "slot_index": 0
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "EmptyLatentImage",
+      "pos": [450, 500],
+      "size": [315, 106],
+      "properties": {},
+      "widgets_values": [
+        2048,
+        1024,
+        1
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [7],
+          "slot_index": 0
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "KSampler",
+      "pos": [950, 50],
+      "size": [315, 262],
+      "properties": {},
+      "widgets_values": [
+        42,
+        "fixed",
+        25,
+        3.5,
+        "euler",
+        "normal",
+        1.0
+      ],
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 5
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 6
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [8],
+          "slot_index": 0
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [1350, 50],
+      "size": [210, 46],
+      "properties": {},
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 8
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [9, 10, 11],
+          "slot_index": 0
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "SaveEXR",
+      "pos": [1650, 50],
+      "size": [315, 130],
+      "properties": {},
+      "widgets_values": [
+        "hdri/equirectangular_panorama",
+        true
+      ],
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 9
+        }
+      ],
+      "title": "Save EXR (32bit HDR)"
+    },
+    {
+      "id": 10,
+      "type": "SaveImageHDR",
+      "pos": [1650, 250],
+      "size": [315, 100],
+      "properties": {},
+      "widgets_values": [
+        "hdri/equirectangular_panorama"
+      ],
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "title": "Save HDR (.hdr Radiance)"
+    },
+    {
+      "id": 11,
+      "type": "SaveImage",
+      "pos": [1650, 420],
+      "size": [315, 270],
+      "properties": {},
+      "widgets_values": [
+        "hdri/equirectangular_preview"
+      ],
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 11
+        }
+      ],
+      "title": "Save Preview (PNG)"
+    }
+  ],
+  "links": [
+    [1, 1, 0, 7, 0, "MODEL"],
+    [2, 2, 0, 4, 0, "CLIP"],
+    [3, 2, 0, 5, 0, "CLIP"],
+    [4, 3, 0, 8, 1, "VAE"],
+    [5, 4, 0, 7, 1, "CONDITIONING"],
+    [6, 5, 0, 7, 2, "CONDITIONING"],
+    [7, 6, 0, 7, 3, "LATENT"],
+    [8, 7, 0, 8, 0, "LATENT"],
+    [9, 8, 0, 9, 0, "IMAGE"],
+    [10, 8, 0, 10, 0, "IMAGE"],
+    [11, 8, 0, 11, 0, "IMAGE"]
+  ],
+  "groups": [
+    {
+      "title": "🔧 Model Loading (Flux.2 Klein 9B FP8)",
+      "bounding": [30, -20, 360, 440],
+      "color": "#3f789e"
+    },
+    {
+      "title": "📝 Prompt & Latent Setup (Equirectangular 2:1)",
+      "bounding": [430, -20, 460, 650],
+      "color": "#2a363b"
+    },
+    {
+      "title": "🎲 Sampling",
+      "bounding": [930, -20, 360, 340],
+      "color": "#8A6642"
+    },
+    {
+      "title": "💾 HDRI Output (EXR + HDR + Preview)",
+      "bounding": [1330, -20, 660, 720],
+      "color": "#4F4F4F"
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [0, 0]
+    },
+    "info": {
+      "name": "Flux.2 Klein 9B - Equirectangular Panorama to HDRI",
+      "author": "VibeCoding_Claude",
+      "description": "Generates equirectangular 360° panorama images using Flux.2 Klein 9B FP8 and saves them as HDRI (.exr, .hdr) format for use as environment maps in 3D applications.",
+      "version": "1.0.0",
+      "required_custom_nodes": [
+        "ComfyUI-HQ-Image-Save (spacepxl) - for SaveEXR node",
+        "ComfyUI_ColorMod (city96) - for SaveImageHDR node"
+      ],
+      "required_models": {
+        "diffusion_model": "flux-2-klein-base-9b-fp8.safetensors → ComfyUI/models/diffusion_models/",
+        "text_encoder": "qwen_3_8b_fp8mixed.safetensors → ComfyUI/models/text_encoders/",
+        "vae": "flux2-vae.safetensors → ComfyUI/models/vae/"
+      }
+    }
+  }
+}
